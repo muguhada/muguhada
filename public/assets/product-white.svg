@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="1000" viewBox="0 0 800 1000">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="0.7" y2="1">
+      <stop offset="0" stop-color="#f2efe6"/><stop offset="1" stop-color="#d9d5c6"/>
+    </linearGradient>
+    <filter id="grain">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/>
+      <feColorMatrix type="saturate" values="0"/>
+      <feComponentTransfer><feFuncA type="linear" slope="0.06"/></feComponentTransfer>
+      <feComposite operator="over" in2="SourceGraphic"/>
+    </filter>
+  </defs>
+  <rect width="800" height="1000" fill="url(#g)" filter="url(#grain)"/>
+  <text x="50%" y="52%" text-anchor="middle" font-family="sans-serif" font-size="22" letter-spacing="5" fill="rgba(60,70,60,0.5)">GYEOL CUP — WHITE</text>
+</svg>

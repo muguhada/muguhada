@@ -1,0 +1,25 @@
+---
+/* KO · EN 언어 전환 — 현재 페이지를 유지한 채 언어만 바꿉니다 */
+import { type Lang, useTranslations, localizePath, stripLang, languages } from '../i18n';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const purePath = stripLang(Astro.url.pathname);
+const langs = Object.keys(languages) as Lang[];
+---
+
+<div class="lang-switch" role="group" aria-label={t('a11y.lang')}>
+  {langs.map((code, i) => (
+    <>
+      {i > 0 && <span class="sep" aria-hidden="true">·</span>}
+      <a
+        href={localizePath(purePath, code)}
+        aria-current={lang === code ? 'true' : undefined}
+        lang={code}
+      >
+        {languages[code]}
+      </a>
+    </>
+  ))}
+</div>

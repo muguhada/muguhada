@@ -1,0 +1,767 @@
+/* ==========================================================================
+   style.css — 사이트 전체 공통 스타일
+   --------------------------------------------------------------------------
+   ① 디자인 토큰(아래 :root)만 바꾸면 색/폰트/간격이 사이트 전체에 반영됩니다.
+   ② 모바일 우선(mobile-first)으로 작성. 브레이크포인트: 640px / 900px
+   ========================================================================== */
+
+/* ── ① 디자인 토큰 ─────────────────────────────────────────────────────── */
+:root {
+  /* 색상 — 예시 브랜드(도자 스튜디오)의 팔레트. 브랜드에 맞게 교체하세요 */
+  --porcelain: #f3f2ec;   /* 바탕 (백자) */
+  --paper:     #fbfaf6;   /* 카드/입력창 */
+  --ink:       #20261f;   /* 본문 텍스트 (먹) */
+  --ink-soft:  #5a615a;   /* 보조 텍스트 */
+  --celadon:   #7fa08c;   /* 포인트 (청자) */
+  --glaze:     #33463b;   /* 어두운 배경 (유약) */
+  --line:      #dad8cd;   /* 구분선 */
+
+  /* 타이포그래피 */
+  --font-display: "Hahmlet", "Noto Serif KR", serif;
+  --font-body: "Pretendard Variable", Pretendard, -apple-system,
+    BlinkMacSystemFont, system-ui, "Segoe UI", sans-serif;
+
+  /* 레이아웃 */
+  --max-w: 1120px;
+  --gutter: clamp(20px, 5vw, 48px);
+  --section-gap: clamp(76px, 12vw, 148px);
+  --header-h: 72px;
+  --radius: 2px;
+}
+
+/* ── 리셋 & 기본 ───────────────────────────────────────────────────────── */
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.75;               /* 한글 가독 행간 */
+  color: var(--ink);
+  background: var(--porcelain);
+  -webkit-font-smoothing: antialiased;
+  word-break: keep-all;            /* 한글 단어 단위 줄바꿈 */
+}
+
+img { max-width: 100%; display: block; }
+
+a { color: inherit; text-decoration: none; }
+
+h1, h2, h3 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  line-height: 1.35;
+  margin: 0 0 0.6em;
+  letter-spacing: -0.01em;
+}
+
+p { margin: 0 0 1em; }
+
+:focus-visible {
+  outline: 2px solid var(--celadon);
+  outline-offset: 3px;
+}
+
+.skip-link {
+  position: absolute;
+  left: 16px;
+  top: -48px;
+  z-index: 100;
+  padding: 10px 16px;
+  background: var(--ink);
+  color: var(--porcelain);
+  transition: top 0.2s;
+}
+.skip-link:focus { top: 12px; }
+
+/* ── 공통 유틸 ─────────────────────────────────────────────────────────── */
+.container {
+  width: min(100% - var(--gutter) * 2, var(--max-w));
+  margin-inline: auto;
+}
+
+.section { padding-block: var(--section-gap); }
+
+.eyebrow {
+  display: inline-block;
+  font-size: 0.8rem;
+  letter-spacing: 0.28em;
+  color: var(--celadon);
+  margin-bottom: 14px;
+  text-transform: uppercase;
+}
+
+.section-title { font-size: clamp(1.55rem, 3.4vw, 2.35rem); }
+
+.lead {
+  color: var(--ink-soft);
+  max-width: 34em;
+}
+
+/* 텍스트 링크 (자세히 보기 →) */
+.link-arrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  border-bottom: 1px solid var(--ink);
+  padding-bottom: 3px;
+  transition: color 0.25s, border-color 0.25s, gap 0.25s;
+}
+.link-arrow:hover {
+  color: var(--celadon);
+  border-color: var(--celadon);
+  gap: 12px;
+}
+
+/* 버튼 */
+.btn {
+  display: inline-block;
+  padding: 11px 24px;
+  background: var(--glaze);
+  color: var(--porcelain);
+  font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: 0.04em;
+  border: 1px solid var(--glaze);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background 0.25s, color 0.25s;
+}
+.btn:hover { background: var(--celadon); border-color: var(--celadon); }
+
+.btn--ghost {
+  background: transparent;
+  color: var(--porcelain);
+  border-color: currentColor;
+}
+.btn--ghost:hover { background: var(--porcelain); color: var(--glaze); }
+
+/* 이미지 프레임 */
+.frame {
+  overflow: hidden;
+  border-radius: var(--radius);
+  background: var(--line);
+}
+.frame img { width: 100%; height: 100%; object-fit: cover; }
+
+/* ── 헤더 ──────────────────────────────────────────────────────────────── */
+.site-header {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 50;
+  height: var(--header-h);
+  display: flex;
+  align-items: center;
+  background: var(--porcelain);
+  border-bottom: 1px solid var(--line);
+  transition: background 0.3s, border-color 0.3s, color 0.3s;
+}
+
+.site-header .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  z-index: 60;
+}
+.logo small {
+  font-family: var(--font-body);
+  font-size: 0.65rem;
+  letter-spacing: 0.3em;
+  margin-left: 10px;
+  color: var(--ink-soft);
+  vertical-align: 2px;
+}
+
+/* 홈: 히어로 위에서는 투명 헤더 → 스크롤 시 배경 채움 */
+body.home .site-header {
+  background: transparent;
+  border-color: transparent;
+  color: var(--ink);
+}
+body.home .site-header.scrolled {
+  background: var(--porcelain);
+  border-color: var(--line);
+  color: var(--ink);
+}
+
+/* 내비게이션 — 모바일: 전체 화면 패널 */
+.nav-toggle {
+  z-index: 60;
+  display: grid;
+  gap: 6px;
+  padding: 10px 4px;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+.nav-toggle span {
+  width: 26px;
+  height: 2px;
+  background: currentColor;
+  transition: transform 0.3s, opacity 0.3s;
+}
+.nav-toggle[aria-expanded="true"] { color: var(--porcelain); }
+.nav-toggle[aria-expanded="true"] span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+.nav-toggle[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+.nav-toggle[aria-expanded="true"] span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+.site-nav {
+  position: fixed;
+  inset: 0;
+  z-index: 55;
+  display: grid;
+  place-content: center;
+  background: var(--glaze);
+  transform: translateY(-102%);
+  transition: transform 0.45s cubic-bezier(0.7, 0, 0.2, 1);
+}
+.site-nav.open { transform: translateY(0); }
+
+.site-nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+  text-align: center;
+}
+.site-nav a {
+  display: block;
+  padding: 12px 24px;
+  font-family: var(--font-display);
+  font-size: 1.7rem;
+  color: var(--porcelain);
+  transition: color 0.25s;
+}
+.site-nav a:hover,
+.site-nav a[aria-current="page"] { color: var(--celadon); }
+
+/* 데스크톱 내비게이션 */
+@media (min-width: 900px) {
+  .nav-toggle { display: none; }
+
+  .site-nav {
+    position: static;
+    transform: none;
+    background: none;
+    display: block;
+    transition: none;
+  }
+  .site-nav ul {
+    display: flex;
+    gap: 36px;
+  }
+  .site-nav a {
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    font-weight: 500;
+    padding: 6px 2px;
+    color: inherit;
+    border-bottom: 1px solid transparent;
+  }
+  .site-nav a:hover { color: var(--celadon); }
+  .site-nav a[aria-current="page"] {
+    color: inherit;
+    border-color: currentColor;
+  }
+}
+
+/* ── 히어로 (index) ────────────────────────────────────────────────────── */
+.hero {
+  position: relative;
+  min-height: 100svh;
+  color: var(--ink);
+  isolation: isolate;
+}
+
+.hero-media,
+.hero-media img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -2;
+}
+
+.hero .container {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.hero-eyebrow {
+  font-size: 0.85rem;
+  letter-spacing: 0.32em;
+  margin-bottom: 20px;
+  color: var(--ink-soft);
+}
+
+.hero h1 {
+  font-size: clamp(2.15rem, 5.6vw, 3rem);
+  font-weight: 500;
+  line-height: 1.28;
+  margin: 0 auto 30px;
+  max-width: 14em;
+}
+
+.hero-scroll {
+  position: absolute;
+  left: var(--gutter);
+  bottom: 22px;
+  font-size: 0.75rem;
+  letter-spacing: 0.3em;
+  opacity: 0.7;
+}
+
+/* ── 홈: 소개 프리뷰(미디어 로우) ──────────────────────────────────────── */
+.split {
+  display: grid;
+  gap: 36px;
+  align-items: center;
+}
+.split .frame { aspect-ratio: 4 / 5; }
+
+@media (min-width: 900px) {
+  .split {
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(48px, 7vw, 96px);
+  }
+  .split.reverse .frame { order: 2; }
+}
+
+/* ── 제품 그리드 ───────────────────────────────────────────────────────── */
+.product-grid {
+  display: grid;
+  gap: 32px 24px;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 640px) { .product-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 900px) { .product-grid { grid-template-columns: repeat(3, 1fr); } }
+
+.product-card .frame {
+  aspect-ratio: 4 / 5;
+  margin-bottom: 16px;
+}
+.product-card img { transition: transform 0.6s cubic-bezier(0.2, 0.6, 0.2, 1); }
+.product-card:hover img { transform: scale(1.04); }
+
+.product-card h3 {
+  font-size: 1.15rem;
+  margin-bottom: 4px;
+}
+.product-card .meta {
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+  margin-bottom: 6px;
+}
+.product-card .price { font-weight: 600; }
+
+/* ── CTA 밴드 (어두운 배경) ────────────────────────────────────────────── */
+.band {
+  background: var(--glaze);
+  color: var(--porcelain);
+  text-align: center;
+}
+.band .section-title { max-width: 18em; margin-inline: auto; }
+.band p {
+  color: color-mix(in srgb, var(--porcelain) 78%, transparent);
+  max-width: 30em;
+  margin-inline: auto;
+}
+.band .btn { margin-top: 20px; }
+
+/* ── 서브 페이지 헤드 ──────────────────────────────────────────────────── */
+.page-head {
+  padding-top: calc(var(--header-h) + clamp(56px, 10vw, 110px));
+  padding-bottom: clamp(40px, 7vw, 80px);
+  border-bottom: 1px solid var(--line);
+}
+.page-head h1 { font-size: clamp(2rem, 5vw, 3.2rem); margin-bottom: 0.35em; }
+
+/* ── 브랜드 소개: 과정(순서 있는 단계) ─────────────────────────────────── */
+.process {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 28px;
+  counter-reset: step;
+}
+@media (min-width: 640px) { .process { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 900px) { .process { grid-template-columns: repeat(4, 1fr); } }
+
+.process li {
+  counter-increment: step;
+  border-top: 1px solid var(--ink);
+  padding-top: 18px;
+}
+.process li::before {
+  content: counter(step, decimal-leading-zero);
+  display: block;
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  color: var(--celadon);
+  margin-bottom: 10px;
+}
+.process h3 { font-size: 1.1rem; margin-bottom: 6px; }
+.process p { font-size: 0.92rem; color: var(--ink-soft); margin: 0; }
+
+/* 원칙(순서 없는 가치) — 정의 리스트 */
+.values {
+  display: grid;
+  gap: 32px;
+  margin: 0;
+}
+@media (min-width: 900px) { .values { grid-template-columns: repeat(3, 1fr); } }
+.values div { border-left: 2px solid var(--celadon); padding-left: 20px; }
+.values dt {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  margin-bottom: 8px;
+}
+.values dd { margin: 0; font-size: 0.95rem; color: var(--ink-soft); }
+
+/* ── 연락처 ────────────────────────────────────────────────────────────── */
+.contact-grid {
+  display: grid;
+  gap: 56px;
+}
+@media (min-width: 900px) {
+  .contact-grid { grid-template-columns: 5fr 6fr; gap: 96px; }
+}
+
+.contact-list {
+  margin: 0;
+  display: grid;
+  gap: 26px;
+}
+.contact-list dt {
+  font-size: 0.8rem;
+  letter-spacing: 0.24em;
+  color: var(--celadon);
+  margin-bottom: 6px;
+}
+.contact-list dd {
+  margin: 0;
+  font-size: 1.05rem;
+}
+.contact-list a { border-bottom: 1px solid var(--line); }
+.contact-list a:hover { border-color: var(--ink); }
+
+/* 문의 폼 */
+.form-field { margin-bottom: 22px; }
+.form-field label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.form-field input,
+.form-field textarea {
+  width: 100%;
+  padding: 14px 16px;
+  font: inherit;
+  color: var(--ink);
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  transition: border-color 0.25s;
+}
+.form-field input:focus,
+.form-field textarea:focus {
+  outline: none;
+  border-color: var(--celadon);
+}
+.form-field textarea { min-height: 150px; resize: vertical; }
+.form-note {
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+  margin-top: 14px;
+}
+
+/* ── 푸터 ──────────────────────────────────────────────────────────────── */
+.site-footer {
+  background: var(--glaze);
+  color: var(--porcelain);
+  padding-block: clamp(48px, 7vw, 80px) 32px;
+  margin-top: var(--section-gap);
+}
+.band + .site-footer,
+.site-footer.flush { margin-top: 0; }
+
+.footer-top {
+  display: grid;
+  gap: 32px;
+  padding-bottom: 40px;
+  border-bottom: 1px solid color-mix(in srgb, var(--porcelain) 20%, transparent);
+}
+@media (min-width: 640px) {
+  .footer-top {
+    grid-template-columns: auto auto;
+    justify-content: space-between;
+    align-items: start;
+  }
+}
+
+.footer-logo {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+}
+.footer-logo small {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  letter-spacing: 0.3em;
+  color: color-mix(in srgb, var(--porcelain) 60%, transparent);
+  margin-top: 8px;
+}
+
+.footer-nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 28px;
+}
+.footer-nav a { opacity: 0.85; }
+.footer-nav a:hover { opacity: 1; color: var(--celadon); }
+
+.footer-bottom {
+  padding-top: 24px;
+  font-size: 0.8rem;
+  color: color-mix(in srgb, var(--porcelain) 55%, transparent);
+}
+
+/* ── 스크롤 리빌 애니메이션 ────────────────────────────────────────────── */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(26px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+[data-reveal].is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* 모션 최소화 설정 존중 */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  [data-reveal] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .product-card img,
+  .site-nav { transition: none; }
+}
+
+/* ══ Astro 버전 추가 스타일 ═══════════════════════════════════════════════ */
+
+/* 헤더 우측 그룹 (내비 + 언어 스위치 + 햄버거) */
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+@media (min-width: 900px) { .header-right { gap: 36px; } }
+
+/* 언어 전환 (KO · EN) */
+.lang-switch {
+  position: relative;
+  z-index: 60;               /* 모바일 오버레이 메뉴 위에 유지 */
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+}
+.lang-switch .sep { opacity: 0.35; }
+.lang-switch a {
+  opacity: 0.5;
+  padding: 4px 1px;
+  border-bottom: 1px solid transparent;
+  transition: opacity 0.2s;
+}
+.lang-switch a:hover { opacity: 1; }
+.lang-switch a[aria-current] {
+  opacity: 1;
+  border-color: currentColor;
+}
+/* 모바일 메뉴가 열리면 어두운 배경 위이므로 밝은 색으로 */
+body.menu-open .lang-switch { color: var(--porcelain); }
+
+/* 번역 문자열의 \n 을 줄바꿈으로 렌더링 */
+.pre-line { white-space: pre-line; }
+
+/* ══ 미세 조정: 로고 · 대표 제품 · 공동대표 ═════════════════════════════ */
+
+/* 로고: 1×1 심볼 + 가로형 워드마크 (인라인 SVG — currentColor 상속) */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: clamp(8px, 1.6vw, 16px);
+}
+.logo-mark,
+.logo-mark svg { width: clamp(30px, 5vw, 48px); height: clamp(30px, 5vw, 48px); display: block; }
+.logo-mark svg,
+.logo-wordmark svg { fill: currentColor; }
+.logo-wordmark { display: block; }
+.logo-wordmark svg { height: clamp(19px, 3.2vw, 31px); width: auto; display: block; }
+
+/* 스크린리더 전용 텍스트 */
+.visually-hidden {
+  position: absolute;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* 홈: 컬러 변형 2장 카드 — 데스크톱에서 2열 고정 */
+@media (min-width: 900px) {
+  .product-grid.cols-2 { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* 제품: 대표 제품 스포트라이트 */
+.product-spot {
+  display: grid;
+  gap: 36px;
+  align-items: start;
+}
+@media (min-width: 900px) {
+  .product-spot {
+    grid-template-columns: 6fr 5fr;
+    gap: clamp(48px, 7vw, 96px);
+  }
+}
+.spot-media .frame { aspect-ratio: 4 / 5; }
+
+/* 컬러 스와치 */
+.swatches { display: flex; gap: 14px; margin-top: 18px; }
+.swatch {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  padding: 0;
+  cursor: pointer;
+}
+.swatch[aria-pressed="true"] {
+  outline: 2px solid var(--celadon);
+  outline-offset: 3px;
+}
+
+.spot-info .section-title { margin-bottom: 0.5em; }
+.spot-meta { color: var(--ink-soft); font-size: 0.92rem; margin-bottom: 6px; }
+.spot-color { font-size: 0.92rem; margin-bottom: 6px; }
+.spot-price { font-weight: 600; font-size: 1.3rem; margin: 14px 0 26px; }
+
+/* 제품: 준비 중 안내 */
+.coming-note {
+  border: 1px solid var(--line);
+  background: var(--paper);
+  padding: 30px 32px;
+  max-width: 560px;
+}
+.coming-note h2 { font-size: 1.25rem; margin-bottom: 6px; }
+.coming-note p { margin: 0; color: var(--ink-soft); font-size: 0.95rem; }
+
+/* 연락처: 공동대표 카드 */
+.founder-grid { display: grid; gap: 48px; }
+@media (min-width: 760px) {
+  .founder-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: clamp(40px, 6vw, 80px);
+  }
+}
+.founder .frame { aspect-ratio: 4 / 5; margin-bottom: 20px; }
+.founder h3 { font-size: 1.45rem; margin-bottom: 2px; }
+.founder .role {
+  font-size: 0.82rem;
+  letter-spacing: 0.12em;
+  color: var(--celadon);
+  margin-bottom: 14px;
+}
+.founder .bio { color: var(--ink-soft); font-size: 0.96rem; }
+.founder-contacts {
+  list-style: none;
+  margin: 18px 0 0;
+  padding: 16px 0 0;
+  border-top: 1px solid var(--line);
+  display: grid;
+  gap: 6px;
+  font-size: 0.92rem;
+}
+.founder-contacts a { border-bottom: 1px solid var(--line); }
+.founder-contacts a:hover { border-color: var(--ink); }
+
+/* 연락처: 스튜디오 안내 2열 */
+@media (min-width: 640px) {
+  .contact-list.wide {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 32px 48px;
+  }
+}
+
+/* ── 제품 3D 뷰어 ── */
+.viewer3d {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  background: var(--paper);
+  touch-action: pan-y;   /* 세로 스크롤은 살리고 가로 드래그로 회전 */
+  cursor: grab;
+}
+.viewer3d:active { cursor: grabbing; }
+.viewer3d canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 0.6s;
+}
+.viewer3d-poster {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity 0.6s;
+}
+.viewer3d.is-ready canvas { opacity: 1; }
+.viewer3d.is-ready .viewer3d-poster { opacity: 0; }
+.viewer3d-hint {
+  position: absolute;
+  left: 50%;
+  bottom: 14px;
+  transform: translateX(-50%);
+  margin: 0;
+  padding: 6px 14px;
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  color: var(--ink-soft);
+  background: color-mix(in srgb, var(--paper) 80%, transparent);
+  border-radius: 2px;
+  opacity: 0;
+  transition: opacity 0.6s;
+  pointer-events: none;
+}
+.viewer3d.is-ready .viewer3d-hint { opacity: 1; }

@@ -1,0 +1,80 @@
+---
+/* 브랜드 소개 — 스토리 / 원칙(values) / 제작 과정(process) */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { type Lang, useTranslations, localizePath } from '../../i18n';
+import { values, process } from '../../data/about';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const l = (path: string) => localizePath(path, lang);
+---
+
+<BaseLayout
+  lang={lang}
+  title={t('meta.about.title')}
+  description={t('meta.about.desc')}
+  footerFlush
+>
+  <section class="page-head">
+    <div class="container">
+      <p class="eyebrow">{t('about.head.eyebrow')}</p>
+      <h1 class="pre-line">{t('about.head.title')}</h1>
+      <p class="lead">{t('about.head.lead')}</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container split reverse" data-reveal>
+      <div class="frame">
+        <img src="/assets/brand.svg" alt={t('about.story.imgAlt')} loading="lazy" />
+      </div>
+      <div>
+        <h2 class="section-title">{t('about.story.title')}</h2>
+        <p>{t('about.story.p1')}</p>
+        <p>{t('about.story.p2')}</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top: 0">
+    <div class="container">
+      <div data-reveal>
+        <p class="eyebrow">{t('about.values.eyebrow')}</p>
+        <h2 class="section-title">{t('about.values.title')}</h2>
+      </div>
+      <dl class="values" style="margin-top: 40px" data-reveal>
+        {values.map((v) => (
+          <div>
+            <dt>{v.title[lang]}</dt>
+            <dd>{v.desc[lang]}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top: 0">
+    <div class="container">
+      <div data-reveal>
+        <p class="eyebrow">{t('about.process.eyebrow')}</p>
+        <h2 class="section-title">{t('about.process.title')}</h2>
+      </div>
+      <ol class="process" style="margin-top: 40px" data-reveal>
+        {process.map((step) => (
+          <li>
+            <h3>{step.title[lang]}</h3>
+            <p>{step.desc[lang]}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="section band" data-reveal>
+    <div class="container">
+      <h2 class="section-title">{t('about.next.title')}</h2>
+      <a class="btn btn--ghost" href={l('/products')}>{t('about.next.cta')}</a>
+    </div>
+  </section>
+</BaseLayout>

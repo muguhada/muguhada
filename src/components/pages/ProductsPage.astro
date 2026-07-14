@@ -1,0 +1,150 @@
+---
+/* 제품 — 대표 제품(컬러 스와치 전환) + 확장 그리드
+   노출 여부는 src/data/products.ts 의 published 플래그로 관리합니다.
+   · published 제품이 1개뿐이면: 스포트라이트 + "준비 중" 안내
+   · 2개 이상이면: 스포트라이트 + 나머지 제품 그리드 */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProductCard from '../ProductCard.astro';
+import Viewer3D from '../Viewer3D.astro';
+import { type Lang, useTranslations, localizePath } from '../../i18n';
+import { products, type ColorVariant } from '../../data/products';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const l = (path: string) => localizePath(path, lang);
+
+/* 컬러 표기: "화이트 · 무광 백자유" (finish 없으면 컬러명만) */
+const colorLabel = (c: ColorVariant) =>
+  c.finish ? `${c.name[lang]} · ${c.finish[lang]}` : c.name[lang];
+
+const published = products.filter((p) => p.published);
+const featured = published[0]; // 첫 번째 published 제품이 대표로 노출
+const others = published.slice(1);
+---
+
+<BaseLayout
+  lang={lang}
+  title={t('meta.products.title')}
+  description={t('meta.products.desc')}
+  footerFlush
+>
+  <section class="page-head">
+    <div class="container">
+      <p class="eyebrow">{t('products.head.eyebrow')}</p>
+      <h1 class="pre-line">{t('products.head.title')}</h1>
+      <p class="lead">{t('products.head.lead')}</p>
+    </div>
+  </section>
+
+  <!-- ══ 대표 제품 스포트라이트 ══ -->
+  {featured && (
+    <section class="section">
+      <div class="container product-spot" data-reveal>
+        <div class="spot-media">
+          {featured.model ? (
+            <Viewer3D
+              stl={featured.model.stl}
+              poster={featured.colors[0].image}
+              posterAlt={featured.colors[0].alt[lang]}
+              materials={featured.colors.map((c) => c.material ?? { color: c.swatch })}
+              hint={t('products.viewer.hint')}
+            />
+          ) : (
+            <div class="frame">
+              <img
+                src={featured.colors[0].image}
+                alt={featured.colors[0].alt[lang]}
+                fetchpriority="high"
+              />
+            </div>
+          )}
+          {featured.colors.length > 1 && (
+            <div class="swatches" role="group" aria-label={t('products.color.label')}>
+              {featured.colors.map((color, i) => (
+                <button
+                  type="button"
+                  class="swatch"
+                  style={`background:${color.swatch}`}
+                  aria-pressed={i === 0 ? 'true' : 'false'}
+                  data-image={color.image}
+                  data-alt={color.alt[lang]}
+                  data-name={colorLabel(color)}
+                >
+                  <span class="visually-hidden">{colorLabel(color)}</span>
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+
+        <div class="spot-info">
+          <p class="eyebrow">{t('products.featured.eyebrow')}</p>
+          <h2 class="section-title">{featured.name[lang]}</h2>
+          <p class="lead">{featured.desc[lang]}</p>
+          <p class="spot-meta">{featured.meta[lang]}</p>
+          <p class="spot-color">
+            {t('products.color.label')} —
+            <span class="spot-color-name">{colorLabel(featured.colors[0])}</span>
+          </p>
+          <p class="spot-price">{featured.price}</p>
+          <a class="btn" href={l('/contact')}>{t('products.featured.cta')}</a>
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- ══ 나머지 제품 그리드 (없으면 "준비 중" 안내) ══ -->
+  {others.length > 0 ? (
+    <section class="section" style="padding-top: 0">
+      <div class="container">
+        <div data-reveal>
+          <p class="eyebrow">{t('products.head.eyebrow')}</p>
+          <h2 class="section-title">{t('products.more.title')}</h2>
+        </div>
+        <div class="product-grid" style="margin-top: 40px" data-reveal>
+          {others.map((product) => (
+            <ProductCard product={product} lang={lang} showPrice />
+          ))}
+        </div>
+      </div>
+    </section>
+  ) : (
+    <section class="section" style="padding-top: 0">
+      <div class="container">
+        <div class="coming-note" data-reveal>
+          <h2>{t('products.coming.title')}</h2>
+          <p>{t('products.coming.body')}</p>
+        </div>
+      </div>
+    </section>
+  )}
+
+  <section class="section band" data-reveal>
+    <div class="container">
+      <h2 class="section-title">{t('products.cta.title')}</h2>
+      <p>{t('products.cta.body')}</p>
+      <a class="btn btn--ghost" href={l('/contact')}>{t('products.cta.btn')}</a>
+    </div>
+  </section>
+
+  <script>
+    /* 컬러 스와치 클릭 → 대표 이미지·컬러명 전환 */
+    document.querySelectorAll('.product-spot').forEach((spot) => {
+      const img = spot.querySelector<HTMLImageElement>('.spot-media img');
+      const nameEl = spot.querySelector('.spot-color-name');
+      const swatches = spot.querySelectorAll<HTMLButtonElement>('.swatch');
+
+      swatches.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          swatches.forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+          if (img && btn.dataset.image) {
+            img.src = btn.dataset.image;
+            img.alt = btn.dataset.alt ?? '';
+          }
+          if (nameEl) nameEl.textContent = btn.dataset.name ?? '';
+        });
+      });
+    });
+  </script>
+</BaseLayout>

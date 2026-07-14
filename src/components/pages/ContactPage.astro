@@ -1,0 +1,93 @@
+---
+/* 연락처 — 공동대표 2인 소개 + 스튜디오 안내
+   대표 정보는 src/data/team.ts 에서 수정합니다. (문의 폼은 제거됨) */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { type Lang, useTranslations } from '../../i18n';
+import { site } from '../../data/site';
+import { founders } from '../../data/team';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<BaseLayout
+  lang={lang}
+  title={t('meta.contact.title')}
+  description={t('meta.contact.desc')}
+>
+  <section class="page-head">
+    <div class="container">
+      <p class="eyebrow">{t('contact.head.eyebrow')}</p>
+      <h1 class="pre-line">{t('contact.head.title')}</h1>
+      <p class="lead">{t('contact.head.lead')}</p>
+    </div>
+  </section>
+
+  <!-- ══ 공동대표 소개 ══ -->
+  <section class="section">
+    <div class="container">
+      <div data-reveal>
+        <p class="eyebrow">{t('contact.founders.eyebrow')}</p>
+        <h2 class="section-title">{t('contact.founders.title')}</h2>
+      </div>
+
+      <div class="founder-grid" style="margin-top: 44px" data-reveal>
+        {founders.map((f) => (
+          <article class="founder">
+            <div class="frame">
+              <img src={f.photo} alt={f.photoAlt[lang]} loading="lazy" />
+            </div>
+            <h3>{f.name[lang]}</h3>
+            <p class="role">{f.role[lang]}</p>
+            <p class="bio">{f.bio[lang]}</p>
+            <ul class="founder-contacts">
+              <li><a href={`mailto:${f.email}`}>{f.email}</a></li>
+              {f.phone && (
+                <li><a href={`tel:${f.phone.replace(/-/g, '')}`}>{f.phone}</a></li>
+              )}
+              {f.instagram && (
+                <li>
+                  <a href={f.instagram.url} target="_blank" rel="noopener">
+                    {f.instagram.handle}
+                  </a>
+                </li>
+              )}
+            </ul>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ 스튜디오 안내 ══ -->
+  <section class="section" style="padding-top: 0">
+    <div class="container">
+      <div data-reveal>
+        <p class="eyebrow">{t('contact.studio.eyebrow')}</p>
+        <h2 class="section-title">{t('contact.studio.title')}</h2>
+      </div>
+
+      <dl class="contact-list wide" style="margin-top: 40px" data-reveal>
+        <div>
+          <dt>EMAIL</dt>
+          <dd><a href={`mailto:${site.email}`}>{site.email}</a></dd>
+        </div>
+        <div>
+          <dt>SHOWROOM</dt>
+          <dd class="pre-line">{t('contact.info.showroom')}</dd>
+        </div>
+        <div>
+          <dt>INSTAGRAM</dt>
+          <dd>
+            <a href={site.instagramUrl} target="_blank" rel="noopener">{site.instagramHandle}</a>
+          </dd>
+        </div>
+        <div>
+          <dt>WHOLESALE</dt>
+          <dd>{t('contact.info.wholesale')}</dd>
+        </div>
+      </dl>
+    </div>
+  </section>
+</BaseLayout>

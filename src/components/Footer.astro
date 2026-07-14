@@ -1,0 +1,25 @@
+---
+import { type Lang, useTranslations, localizePath } from '../i18n';
+import { site } from '../data/site';
+
+interface Props { lang: Lang; flush?: boolean }
+const { lang, flush = false } = Astro.props;
+const t = useTranslations(lang);
+const l = (path: string) => localizePath(path, lang);
+---
+
+<footer class:list={['site-footer', { flush }]}>
+  <div class="container">
+    <div class="footer-top">
+      <p class="footer-logo">{site.brandName} <small>{t('footer.tagline')}</small></p>
+      <nav class="footer-nav" aria-label={t('a11y.footerMenu')}>
+        <ul>
+          <li><a href={l('/about')}>{t('nav.about')}</a></li>
+          <li><a href={l('/products')}>{t('nav.products')}</a></li>
+          <li><a href={l('/contact')}>{t('nav.contact')}</a></li>
+        </ul>
+      </nav>
+    </div>
+    <p class="footer-bottom">{t('footer.copyright')}</p>
+  </div>
+</footer>

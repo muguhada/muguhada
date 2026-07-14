@@ -1,0 +1,96 @@
+---
+/* 홈 — 히어로 + 브랜드/제품/연락처 프리뷰. ko/en 라우트가 공유합니다. */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { type Lang, useTranslations, localizePath } from '../../i18n';
+import { site } from '../../data/site';
+import { products } from '../../data/products';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const l = (path: string) => localizePath(path, lang);
+
+/* 홈에는 첫 번째 published 제품의 컬러 변형(화이트/블랙)을 카드로 노출 */
+const featured = products.find((p) => p.published)!;
+---
+
+<BaseLayout
+  lang={lang}
+  title={t('meta.home.title')}
+  description={t('meta.home.desc')}
+  bodyClass="home"
+  footerFlush
+>
+  <!-- ══ 히어로 — PC/모바일 이미지가 분리되어 있습니다 (경로: src/data/site.ts) ══ -->
+  <section class="hero">
+    <picture class="hero-media">
+      <source media="(min-width: 768px)" srcset={site.heroDesktop} />
+      <img src={site.heroMobile} alt={t('home.hero.alt')} fetchpriority="high" />
+    </picture>
+
+    <div class="container">
+      <p class="hero-eyebrow">{t('home.hero.eyebrow')}</p>
+      <h1 class="pre-line">{t('home.hero.title')}</h1>
+    </div>
+
+    <p class="hero-scroll" aria-hidden="true">SCROLL</p>
+  </section>
+
+  <!-- ══ 브랜드 소개 프리뷰 ══ -->
+  <section class="section">
+    <div class="container split" data-reveal>
+      <div class="frame">
+        <img src="/assets/brand.svg" alt={t('home.brand.imgAlt')} loading="lazy" />
+      </div>
+      <div>
+        <p class="eyebrow">{t('home.brand.eyebrow')}</p>
+        <h2 class="section-title pre-line">{t('home.brand.title')}</h2>
+        <p class="lead">{t('home.brand.body')}</p>
+        <a class="link-arrow" href={l('/about')}>
+          {t('home.brand.link')} <span aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ 제품 프리뷰 ══ -->
+  <section class="section">
+    <div class="container">
+      <div data-reveal>
+        <p class="eyebrow">{t('home.products.eyebrow')}</p>
+        <h2 class="section-title">{t('home.products.title')}</h2>
+        <p class="lead">{t('home.products.lead')}</p>
+      </div>
+
+      <div class="product-grid cols-2" style="margin-top: 44px" data-reveal>
+        {featured.colors.map((color) => (
+          <article class="product-card">
+            <a href={l('/products')}>
+              <div class="frame">
+                <img src={color.image} alt={color.alt[lang]} loading="lazy" />
+              </div>
+              <h3>{featured.name[lang]} — {color.name[lang]}</h3>
+              <p class="meta">{featured.meta[lang]}</p>
+            </a>
+          </article>
+        ))}
+      </div>
+
+      <p style="margin-top: 40px" data-reveal>
+        <a class="link-arrow" href={l('/products')}>
+          {t('home.products.link')} <span aria-hidden="true">→</span>
+        </a>
+      </p>
+    </div>
+  </section>
+
+  <!-- ══ 연락처 CTA ══ -->
+  <section class="section band" data-reveal>
+    <div class="container">
+      <p class="eyebrow">{t('home.contact.eyebrow')}</p>
+      <h2 class="section-title">{t('home.contact.title')}</h2>
+      <p>{t('home.contact.body')}</p>
+      <a class="btn btn--ghost" href={l('/contact')}>{t('home.contact.cta')}</a>
+    </div>
+  </section>
+</BaseLayout>

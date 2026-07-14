@@ -1,0 +1,145 @@
+---
+/* ==========================================================================
+   Viewer3D.astro — STL 제품 3D 뷰어
+   --------------------------------------------------------------------------
+   · 드래그(터치 포함)로 좌우(Y축) 회전만 가능
+   · 같은 .product-spot 안의 컬러 스와치를 누르면 재질(색/광택)이 바뀜
+   · 모델 로드 전/실패 시엔 poster 이미지가 그대로 보임 (안전한 폴백)
+   · prefers-reduced-motion 환경에서는 자동 회전 없음
+   ========================================================================== */
+interface Props {
+  stl: string;
+  poster: string;      // 로드 전/실패 시 보여줄 이미지
+  posterAlt: string;
+  materials: { color: string; roughness?: number; metalness?: number }[];
+  hint: string;        // "드래그해서 돌려보세요"
+}
+const { stl, poster, posterAlt, materials, hint } = Astro.props;
+---
+
+<div class="frame viewer3d" data-stl={stl} data-materials={JSON.stringify(materials)}>
+  <img class="viewer3d-poster" src={poster} alt={posterAlt} />
+  <p class="viewer3d-hint" aria-hidden="true">{hint}</p>
+</div>
+
+<script>
+  import * as THREE from 'three';
+  import { STLLoader } from 'three/addons/loaders/STLLoader.js';
+
+  document.querySelectorAll<HTMLElement>('.viewer3d').forEach((el) => {
+    const stlUrl = el.dataset.stl;
+    if (!stlUrl) return;
+
+    const materials = JSON.parse(el.dataset.materials ?? '[]') as {
+      color: string; roughness?: number; metalness?: number;
+    }[];
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    /* ── 기본 씬 구성 ── */
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 50);
+    camera.position.set(0, 0.25, 3.4);
+    camera.lookAt(0, 0, 0);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+    /* 도자기 느낌의 부드러운 3점 조명 */
+    scene.add(new THREE.HemisphereLight(0xffffff, 0x8a8f86, 1.1));
+    const key = new THREE.DirectionalLight(0xffffff, 1.5);
+    key.position.set(2.5, 3, 2.5);
+    scene.add(key);
+    const fill = new THREE.DirectionalLight(0xfff4e6, 0.4);
+    fill.position.set(-3, 1, -2);
+    scene.add(fill);
+
+    const first = materials[0] ?? { color: '#dddddd' };
+    const material = new THREE.MeshStandardMaterial({
+      color: new THREE.Color(first.color),
+      roughness: first.roughness ?? 0.8,
+      metalness: first.metalness ?? 0,
+      side: THREE.DoubleSide,
+    });
+
+    /* Y축 회전용 피벗 */
+    const pivot = new THREE.Group();
+    scene.add(pivot);
+
+    /* ── STL 로드 (실패해도 poster 이미지가 남으므로 안전) ── */
+    new STLLoader().load(
+      stlUrl,
+      (geometry) => {
+        geometry.computeVertexNormals();
+        geometry.center();
+        geometry.computeBoundingBox();
+        const size = new THREE.Vector3();
+        geometry.boundingBox!.getSize(size);
+
+        const mesh = new THREE.Mesh(geometry, material);
+        mesh.scale.setScalar(1.7 / Math.max(size.x, size.y, size.z));
+        mesh.rotation.x = -Math.PI / 2; // STL의 Z-업 → 화면 Y-업
+        pivot.add(mesh);
+
+        el.appendChild(renderer.domElement);
+        resize();
+        el.classList.add('is-ready');
+      },
+      undefined,
+      () => console.warn('[viewer3d] STL 로드 실패 — poster 이미지로 대체:', stlUrl)
+    );
+
+    /* ── 크기 대응 ── */
+    const resize = () => {
+      const w = el.clientWidth;
+      const h = el.clientHeight;
+      if (!w || !h) return;
+      renderer.setSize(w, h, false);
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+    };
+    new ResizeObserver(resize).observe(el);
+
+    /* ── 드래그 → 좌우(Y축) 회전만 ── */
+    let target = 0;
+    let dragging = false;
+    let lastX = 0;
+
+    el.addEventListener('pointerdown', (e) => {
+      dragging = true;
+      lastX = e.clientX;
+      el.setPointerCapture(e.pointerId);
+    });
+    el.addEventListener('pointermove', (e) => {
+      if (!dragging) return;
+      target += (e.clientX - lastX) * 0.012;
+      lastX = e.clientX;
+    });
+    const stop = () => (dragging = false);
+    el.addEventListener('pointerup', stop);
+    el.addEventListener('pointercancel', stop);
+
+    /* ── 컬러 스와치 연동 (같은 product-spot 안의 버튼) ── */
+    const spot = el.closest('.product-spot');
+    spot?.querySelectorAll<HTMLButtonElement>('.swatch').forEach((btn, i) => {
+      btn.addEventListener('click', () => {
+        const m = materials[i];
+        if (!m) return;
+        material.color.set(m.color);
+        material.roughness = m.roughness ?? 0.8;
+        material.metalness = m.metalness ?? 0;
+      });
+    });
+
+    /* ── 렌더 루프 (화면 밖이면 쉬어감) ── */
+    let visible = true;
+    new IntersectionObserver(([entry]) => (visible = entry.isIntersecting)).observe(el);
+
+    const autoSpeed = reduceMotion ? 0 : 0.003;
+    renderer.setAnimationLoop(() => {
+      if (!visible) return;
+      if (!dragging) target += autoSpeed;
+      pivot.rotation.y += (target - pivot.rotation.y) * 0.1;
+      renderer.render(scene, camera);
+    });
+  });
+</script>

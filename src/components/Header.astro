@@ -1,0 +1,66 @@
+---
+import LangSwitch from './LangSwitch.astro';
+import { type Lang, useTranslations, localizePath, stripLang } from '../i18n';
+import { site } from '../data/site';
+import logoMark from '../assets/brand/logo-mark.svg?raw';
+import wordmarkKo from '../assets/brand/wordmark-ko.svg?raw';
+import wordmarkEn from '../assets/brand/wordmark-en.svg?raw';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const l = (path: string) => localizePath(path, lang);
+
+const current = stripLang(Astro.url.pathname);
+const items = [
+  { path: '/', label: t('nav.home') },
+  { path: '/about', label: t('nav.about') },
+  { path: '/products', label: t('nav.products') },
+  { path: '/contact', label: t('nav.contact') },
+];
+---
+
+<header class="site-header">
+  <div class="container">
+    <a class="logo" href={l('/')} aria-label={`${site.brandName} ${site.brandLatin}`}>
+      <!-- 1×1 심볼 (src/assets/brand/logo-mark.svg) -->
+      <span class="logo-mark" aria-hidden="true" set:html={logoMark} />
+
+      {site.headerTextLogo ? (
+        <!-- 텍스트 로고 — site.ts 의 headerTextLogo: true 일 때만 표시 -->
+        <span class="logo-text">{site.brandName} <small>{site.brandLatin}</small></span>
+      ) : (
+        <!-- 가로형 워드마크 — 한글/영문 병행 표기 (언어 토글과 무관하게 항상 둘 다 표시) -->
+        <Fragment>
+          <span class="logo-wordmark logo-wordmark--ko" aria-hidden="true" set:html={wordmarkKo} />
+          <span class="logo-wordmark logo-wordmark--en" aria-hidden="true" set:html={wordmarkEn} />
+        </Fragment>
+      )}
+    </a>
+
+    <div class="header-right">
+      <nav id="site-nav" class="site-nav" aria-label={t('a11y.mainMenu')}>
+        <ul>
+          {items.map((item) => (
+            <li>
+              <a href={l(item.path)} aria-current={current === item.path ? 'page' : undefined}>
+                {item.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      <LangSwitch lang={lang} />
+
+      <button
+        class="nav-toggle"
+        aria-expanded="false"
+        aria-controls="site-nav"
+        aria-label={t('a11y.menuOpen')}
+      >
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>

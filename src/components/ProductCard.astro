@@ -1,0 +1,25 @@
+---
+import type { Lang } from '../i18n';
+import type { Product } from '../data/products';
+
+interface Props {
+  product: Product;
+  lang: Lang;
+  href?: string;        // 지정 시 카드 전체가 링크가 됩니다
+  showPrice?: boolean;
+}
+const { product, lang, href, showPrice = false } = Astro.props;
+const primary = product.colors[0]; // 첫 번째 컬러가 카드 대표 이미지
+const Wrapper = href ? 'a' : 'div';
+---
+
+<article class="product-card">
+  <Wrapper href={href}>
+    <div class="frame">
+      <img src={primary.image} alt={primary.alt[lang]} loading="lazy" />
+    </div>
+    <h3>{product.name[lang]}</h3>
+    <p class="meta">{product.meta[lang]}</p>
+    {showPrice && <p class="price">{product.price}</p>}
+  </Wrapper>
+</article>
