@@ -1,0 +1,64 @@
+---
+/* ==========================================================================
+   ProductGallery.astro — 정지 이미지 갤러리 (3D 뷰어 대안)
+   --------------------------------------------------------------------------
+   · 이미지를 클릭하면 다음 장으로 넘어갑니다 (마지막 다음엔 처음으로 순환).
+   · 2장 이상일 때만 점 인디케이터가 표시되고, 점을 눌러 바로 이동할 수 있습니다.
+   ========================================================================== */
+interface Props {
+  images: { image: string; alt: string }[];
+}
+const { images } = Astro.props;
+---
+
+<div class="frame gallery" data-gallery>
+  {images.map((img, i) => (
+    <img
+      class="gallery-img"
+      src={img.image}
+      alt={img.alt}
+      loading={i === 0 ? 'eager' : 'lazy'}
+      style={i === 0 ? undefined : 'display:none'}
+    />
+  ))}
+  {images.length > 1 && (
+    <div class="gallery-dots" role="tablist" aria-label="사진 목록">
+      {images.map((img, i) => (
+        <button
+          type="button"
+          class="gallery-dot"
+          data-index={i}
+          aria-current={i === 0 ? 'true' : 'false'}
+          aria-label={img.alt}
+        />
+      ))}
+    </div>
+  )}
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-gallery]').forEach((el) => {
+    const imgs = Array.from(el.querySelectorAll<HTMLImageElement>('.gallery-img'));
+    const dots = Array.from(el.querySelectorAll<HTMLButtonElement>('.gallery-dot'));
+    if (imgs.length < 2) return;
+
+    let current = 0;
+    const show = (i: number) => {
+      current = (i + imgs.length) % imgs.length;
+      imgs.forEach((img, idx) => { img.style.display = idx === current ? '' : 'none'; });
+      dots.forEach((dot, idx) => dot.setAttribute('aria-current', String(idx === current)));
+    };
+
+    el.addEventListener('click', (e) => {
+      if ((e.target as HTMLElement).closest('.gallery-dot')) return;
+      show(current + 1);
+    });
+
+    dots.forEach((dot, i) => {
+      dot.addEventListener('click', (e) => {
+        e.stopPropagation();
+        show(i);
+      });
+    });
+  });
+</script>

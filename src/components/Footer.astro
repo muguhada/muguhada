@@ -1,6 +1,5 @@
 ---
 import { type Lang, useTranslations, localizePath } from '../i18n';
-import { site } from '../data/site';
 
 interface Props { lang: Lang; flush?: boolean }
 const { lang, flush = false } = Astro.props;
@@ -11,12 +10,13 @@ const l = (path: string) => localizePath(path, lang);
 <footer class:list={['site-footer', { flush }]}>
   <div class="container">
     <div class="footer-top">
-      <p class="footer-logo">{site.brandName} <small>{t('footer.tagline')}</small></p>
+      {/* 브랜드명 리뉴얼(결 → 무구하다) 반영, 임시로 문자열 직접 표기 */}
+      <p class="footer-logo">무구하다 <small>MUGUHADA</small></p>
       <nav class="footer-nav" aria-label={t('a11y.footerMenu')}>
         <ul>
-          <li><a href={l('/about')}>{t('nav.about')}</a></li>
+          {/* 임시 비활성화 — 나중에 다시 켤 것 <li><a href={l('/about')}>{t('nav.about')}</a></li> */}
           <li><a href={l('/products')}>{t('nav.products')}</a></li>
-          <li><a href={l('/contact')}>{t('nav.contact')}</a></li>
+          {/* 임시 비활성화 — 나중에 다시 켤 것 <li><a href={l('/contact')}>{t('nav.contact')}</a></li> */}
         </ul>
       </nav>
     </div>

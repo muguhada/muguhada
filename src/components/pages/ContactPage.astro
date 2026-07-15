@@ -41,7 +41,7 @@ const t = useTranslations(lang);
             <h3>{f.name[lang]}</h3>
             <p class="role">{f.role[lang]}</p>
             <p class="bio">{f.bio[lang]}</p>
-            <ul class="founder-contacts">
+            <ul class="founder-contacts selectable">
               <li><a href={`mailto:${f.email}`}>{f.email}</a></li>
               {f.phone && (
                 <li><a href={`tel:${f.phone.replace(/-/g, '')}`}>{f.phone}</a></li>
@@ -68,7 +68,7 @@ const t = useTranslations(lang);
         <h2 class="section-title">{t('contact.studio.title')}</h2>
       </div>
 
-      <dl class="contact-list wide" style="margin-top: 40px" data-reveal>
+      <dl class="contact-list wide selectable" style="margin-top: 40px" data-reveal>
         <div>
           <dt>EMAIL</dt>
           <dd><a href={`mailto:${site.email}`}>{site.email}</a></dd>

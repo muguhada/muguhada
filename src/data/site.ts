@@ -20,7 +20,7 @@ export const site = {
   heroMobile: '/assets/hero-mobile.webp',
 
   /* 연락 정보 */
-  email: 'hello@gyeol.example',
-  instagramHandle: '@gyeol.studio',
-  instagramUrl: 'https://instagram.com/',
+  email: 'muguhada@gmail.com',
+  instagramHandle: '@muguhada_official',
+  instagramUrl: 'https://instagram.com/muguhada_official',
 };

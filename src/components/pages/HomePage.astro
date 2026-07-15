@@ -46,9 +46,11 @@ const featured = products.find((p) => p.published)!;
         <p class="eyebrow">{t('home.brand.eyebrow')}</p>
         <h2 class="section-title pre-line">{t('home.brand.title')}</h2>
         <p class="lead">{t('home.brand.body')}</p>
+        {/* 임시 비활성화 — 나중에 다시 켤 것
         <a class="link-arrow" href={l('/about')}>
           {t('home.brand.link')} <span aria-hidden="true">→</span>
         </a>
+        */}
       </div>
     </div>
   </section>
@@ -90,7 +92,24 @@ const featured = products.find((p) => p.published)!;
       <p class="eyebrow">{t('home.contact.eyebrow')}</p>
       <h2 class="section-title">{t('home.contact.title')}</h2>
       <p>{t('home.contact.body')}</p>
-      <a class="btn btn--ghost" href={l('/contact')}>{t('home.contact.cta')}</a>
+      {/* 임시 비활성화 — 나중에 다시 켤 것 <a class="btn btn--ghost" href={l('/contact')}>{t('home.contact.cta')}</a> */}
+      <p class="band-contact selectable">
+        <a class="contact-icon-link" href={site.instagramUrl} target="_blank" rel="noopener">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <rect x="3" y="3" width="18" height="18" rx="5" />
+            <circle cx="12" cy="12" r="4" />
+            <circle cx="17.3" cy="6.7" r="1.1" fill="currentColor" stroke="none" />
+          </svg>
+          {site.instagramHandle}
+        </a>
+        <a class="contact-icon-link" href={`mailto:${site.email}`}>
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <rect x="3" y="5" width="18" height="14" rx="2" />
+            <path d="M3 7l9 6 9-6" />
+          </svg>
+          {site.email}
+        </a>
+      </p>
     </div>
   </section>
 </BaseLayout>

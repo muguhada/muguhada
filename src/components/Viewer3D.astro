@@ -25,6 +25,7 @@ const { stl, poster, posterAlt, materials, hint } = Astro.props;
 <script>
   import * as THREE from 'three';
   import { STLLoader } from 'three/addons/loaders/STLLoader.js';
+  import { mergeVertices } from 'three/addons/utils/BufferGeometryUtils.js';
 
   document.querySelectorAll<HTMLElement>('.viewer3d').forEach((el) => {
     const stlUrl = el.dataset.stl;
@@ -69,6 +70,12 @@ const { stl, poster, posterAlt, materials, hint } = Astro.props;
     new STLLoader().load(
       stlUrl,
       (geometry) => {
+        /* STL은 삼각형마다 정점이 따로 저장돼 있고(정점 공유 없음) 면마다 다른 법선이
+           박혀 있어, 좌표가 같아도 법선이 달라 mergeVertices가 서로 다른 정점으로 보고
+           합치지 못합니다. 기존 법선을 먼저 지우고 위치 기준으로만 합친 뒤 새로 계산해야
+           저폴리곤에서도 표면이 매끈하게(스무스 셰이딩) 보입니다. */
+        geometry.deleteAttribute('normal');
+        geometry = mergeVertices(geometry);
         geometry.computeVertexNormals();
         geometry.center();
         geometry.computeBoundingBox();
@@ -76,7 +83,7 @@ const { stl, poster, posterAlt, materials, hint } = Astro.props;
         geometry.boundingBox!.getSize(size);
 
         const mesh = new THREE.Mesh(geometry, material);
-        mesh.scale.setScalar(1.7 / Math.max(size.x, size.y, size.z));
+        mesh.scale.setScalar((1.7 * 0.6) / Math.max(size.x, size.y, size.z)); // 프레임 대비 60% 크기
         mesh.rotation.x = -Math.PI / 2; // STL의 Z-업 → 화면 Y-업
         pivot.add(mesh);
 

@@ -21,6 +21,11 @@ export interface ColorVariant {
   material?: { color: string; roughness?: number; metalness?: number };
 }
 
+export interface GalleryImage {
+  image: string; // public/assets/ 안의 이미지 경로
+  alt: L10n;
+}
+
 export interface Product {
   published: boolean;
   name: L10n;
@@ -29,39 +34,42 @@ export interface Product {
   price: string;
   colors: ColorVariant[]; // 1개 이상 — 첫 번째가 기본 노출
   /* 3D 인터랙티브 뷰어 (선택) — 대표 제품일 때 이미지 대신 STL 모델 표시.
-     이 필드를 지우면 기존처럼 이미지로 돌아갑니다.
+     이 필드를 지우면 기존처럼 이미지로 돌아갑니다. model 이 있으면 gallery 보다 우선합니다.
      ⚠ public/ 에 올린 STL은 방문자가 다운로드할 수 있습니다 (README 참고) */
   model?: { stl: string };
+  /* 정지 이미지 갤러리 (선택) — model 이 없을 때, 대표 제품 사진을 여러 장 넣을 수 있습니다.
+     2장 이상이면 이미지를 클릭해 다음 장으로 넘기는 UI와 점 인디케이터가 자동으로 붙습니다.
+     1장이면 인디케이터 없이 사진 한 장만 보여줍니다. */
+  gallery?: GalleryImage[];
 }
 
 export const products: Product[] = [
   /* ── 현재 판매 중 ─────────────────────────────────────────────────── */
   {
     published: true,
-    name: { ko: '결 컵', en: 'Gyeol cup' },
+    name: { ko: '치미 나이트', en: 'Chimi Knight' },
     desc: {
-      ko: '손잡이 없이 두 손으로 감싸 쥐는 컵입니다. 입술이 닿는 부분을 얇게 다듬어 커피와 차 어느 쪽에도 잘 맞습니다.',
-      en: 'A handleless cup made to be held with both hands. The lip is finished thin, so it suits coffee and tea alike.',
+      ko: '전통적인 미감과 실용성을 동시에 갖춘 치미 나이트 체스말을 만나보세요.',
+      en: 'Meet the Chimi Knight — a chess piece that brings together traditional aesthetics and everyday practicality.',
     },
-    meta: { ko: '백자토 · 350ml', en: 'Porcelain clay · 350ml' },
-    price: '₩34,000',
-    model: { stl: '/assets/product-sample.stl' }, // ✏️ 실제 STL로 교체 (지우면 이미지 표시)
+    meta: { ko: '세라믹', en: 'Ceramic' },
+    price: '품절',
+    model: { stl: '/assets/chimi-knight.stl' }, // ✏️ 실제 STL로 교체 (지우면 사진만 표시)
     colors: [
       {
         name: { ko: '화이트', en: 'White' },
-        finish: { ko: '무광 백자유', en: 'Matte glaze' },
         swatch: '#f0ede2',
         image: '/assets/product-white.svg',
-        alt: { ko: '무광 백자유를 입힌 결 컵 화이트', en: 'The Gyeol cup in matte white' },
+        alt: { ko: '무광 백자유를 입힌 치미 나이트 화이트', en: 'The Chimi Knight in matte white' },
         material: { color: '#eae6da', roughness: 0.9 },
       },
       {
         name: { ko: '블랙', en: 'Black' },
-        finish: { ko: '흑유', en: 'Dark glaze' },
-        swatch: '#262924',
+        finish: { ko: '차콜 유약', en: 'Charcoal glaze' },
+        swatch: '#3d3c38',
         image: '/assets/product-black.svg',
-        alt: { ko: '흑유를 입힌 결 컵 블랙', en: 'The Gyeol cup in glossy black' },
-        material: { color: '#22251f', roughness: 0.3 },
+        alt: { ko: '차콜 유약을 입힌 치미 나이트 블랙', en: 'The Chimi Knight in a charcoal matte glaze' },
+        material: { color: '#3d3c38', roughness: 0.6 },
       },
     ],
   },

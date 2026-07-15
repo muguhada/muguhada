@@ -21,12 +21,12 @@ export const ui = {
   'a11y.lang':       { ko: '언어 선택', en: 'Select language' },
 
   /* ── 메타 (브라우저 탭 제목 / 검색 설명) ── */
-  'meta.home.title': { ko: '결 GYEOL — 도자 스튜디오', en: 'Gyeol — Ceramic Studio' },
+  'meta.home.title': { ko: '무구하다 MUGUHADA', en: 'MUGUHADA' },
   'meta.home.desc': {
-    ko: '매일의 식탁에 오르는 그릇을 빚는 도자 스튜디오 결. 브랜드 소개, 제품, 문의.',
-    en: 'Gyeol is a ceramic studio making tableware for everyday meals. Brand story, products, and contact.',
+    ko: '한국의 전통 문화를 기반으로 세상에 없던 특별한 제품을 선보이는 무구하다. 브랜드 소개, 제품, 문의.',
+    en: 'MUGUHADA is a ceramic studio making tableware for everyday meals. Brand story, products, and contact.',
   },
-  'meta.about.title': { ko: '브랜드 소개 — 결 GYEOL', en: 'About — Gyeol' },
+  'meta.about.title': { ko: '브랜드 소개 — 무구하다 MUGUHADA', en: 'About — MUGUHADA' },
   'meta.about.desc': {
     ko: '도자 스튜디오 결이 그릇을 만드는 방식과 원칙을 소개합니다.',
     en: 'How ceramic studio Gyeol makes its ware, and the principles behind it.',
@@ -43,9 +43,9 @@ export const ui = {
   },
 
   /* ── 홈: 히어로 ── */
-  'home.hero.eyebrow': { ko: '도자 스튜디오 결', en: 'CERAMIC STUDIO GYEOL' },
+  'home.hero.eyebrow': { ko: '무구하다', en: 'MUGUHADA' },
   'home.hero.title': {
-    ko: '흙의 결을 읽고,\n쓰임을 빚습니다',
+    ko: '현대적으로 풀어낸 \n한국의 전통 문화',
     en: 'We read the grain of clay\nand shape it for daily use',
   },
   'home.hero.alt': {
@@ -54,10 +54,10 @@ export const ui = {
   },
   /* ── 홈: 브랜드 프리뷰 ── */
   'home.brand.eyebrow': { ko: '브랜드', en: 'Brand' },
-  'home.brand.title': { ko: '작은 가마에서\n시작된 원칙', en: 'Principles that began\nat a small kiln' },
+  'home.brand.title': { ko: '무구하다만의\n특별한 시선', en: 'Principles that began\nat a small kiln' },
   'home.brand.body': {
-    ko: '결은 2019년 문을 연 1인 도자 작업실에서 출발했습니다. 빠르게 만들 수 있는 방법보다, 오래 쓸 수 있는 방법을 먼저 묻습니다. 흙을 고르는 일부터 유약을 입히는 마지막 순간까지 한 사람의 손을 거칩니다.',
-    en: 'Gyeol began in 2019 as a one-person pottery studio. Before asking how to make things faster, we ask how to make them last. From choosing the clay to the final coat of glaze, every piece passes through one pair of hands.',
+    ko: '2026년에 설립된 무구하다는 한국의 전통 문화를 기반으로 세상에 없던 특별한 제품을 선보이기 출발했습니다.',
+    en: 'MUGUHADA began in 2019 as a one-person pottery studio. Before asking how to make things faster, we ask how to make them last. From choosing the clay to the final coat of glaze, every piece passes through one pair of hands.',
   },
   'home.brand.link': { ko: '브랜드 이야기 보기', en: 'Read our story' },
   'home.brand.imgAlt': {
@@ -67,18 +67,18 @@ export const ui = {
 
   /* ── 홈: 제품 프리뷰 ── */
   'home.products.eyebrow': { ko: '제품', en: 'Products' },
-  'home.products.title': { ko: '손에 익는 기물들', en: 'Ware that fits the hand' },
+  'home.products.title': { ko: '치미 나이트 체스말', en: 'Ware that fits the hand' },
   'home.products.lead': {
-    ko: '지금은 단 하나의 컵을, 화이트와 블랙 두 가지 색으로 만듭니다.',
+    ko: '전통적인 미감과 실용성을 동시에 갖춘 치미 나이트 체스말을 만나보세요.',
     en: 'Right now we make a single cup — in white, and in black.',
   },
   'home.products.link': { ko: '전체 제품 보기', en: 'View all products' },
 
   /* ── 홈: 연락처 CTA ── */
   'home.contact.eyebrow': { ko: '연락처', en: 'Contact' },
-  'home.contact.title': { ko: '함께 만들 이야기가 있나요?', en: 'Have something to make together?' },
+  'home.contact.title': { ko: '문의사항이 있으십니까?', en: 'Have something to make together?' },
   'home.contact.body': {
-    ko: '주문 제작, 입점·협업, 클래스 문의 모두 환영합니다. 영업일 기준 2일 안에 답장드립니다.',
+    ko: '입점 및 주문 문의 등은 아래 주소로 연락주시면 최대한 빠르게 답장 드리겠습니다.',
     en: 'Custom orders, wholesale, collaboration, and class inquiries are all welcome. We reply within two business days.',
   },
   'home.contact.cta': { ko: '문의하기', en: 'Get in touch' },
@@ -115,25 +115,28 @@ export const ui = {
 
   /* ── 제품 페이지 ── */
   'products.head.eyebrow': { ko: '제품', en: 'Products' },
-  'products.head.title': { ko: '하나의 기물,\n두 가지 색', en: 'One piece,\ntwo colors' },
+  'products.head.title': { ko: '치미 나이트 체스말을 만나보세요.', en: 'One piece,\ntwo colors' },
   'products.head.lead': {
-    ko: '전자레인지·식기세척기 사용이 가능합니다. 모든 기물은 소량 생산되어 재고가 유동적입니다.',
+    ko: '호환되는 규격의 체스보드에서 실제 체스 게임에 사용할 수 있으며, 체스를 즐기지 않는 분들도 하나의 오브제로 데스크에 두고 공간에 포인트를 줄 수 있습니다.',
     en: 'Microwave- and dishwasher-safe. Everything is made in small batches, so stock varies.',
   },
-  'products.featured.eyebrow': { ko: '판매 중', en: 'Available now' },
-  'products.featured.cta': { ko: '주문 문의하기', en: 'Inquire to order' },
+  'products.featured.eyebrow': { ko: '준비중', en: 'Coming soon' },
+  'products.featured.cta': { ko: '출시 예정', en: 'Coming soon' },
   'products.color.label': { ko: '컬러', en: 'Color' },
   'products.viewer.hint': { ko: '드래그해서 돌려보세요', en: 'Drag to rotate' },
+  'products.viewer.slides': { ko: '보기 전환', en: 'Switch view' },
+  'products.viewer.photoSlide': { ko: '사진으로 보기', en: 'View photo' },
+  'products.viewer.modelSlide': { ko: '3D로 보기', en: 'View 3D' },
   'products.more.title': { ko: '다른 기물', en: 'More pieces' },
-  'products.coming.title': { ko: '다음 기물을 준비하고 있습니다', en: 'The next piece is in the works' },
+  'products.coming.title': { ko: '다음 제품을 준비하고 있습니다.', en: 'The next product is in the works.' },
   'products.coming.body': {
-    ko: '새 기물은 완성되는 대로 인스타그램에서 가장 먼저 소개합니다.',
-    en: 'New pieces are announced first on Instagram as they are finished.',
+    ko: '새 제품이 완성되는 대로 소개해드리겠습니다.',
+    en: "We'll introduce our next product as soon as it's ready.",
   },
-  'products.cta.title': { ko: '재고 확인과 주문 제작 문의', en: 'Stock checks & custom orders' },
+  'products.cta.title': { ko: '재고 확인 및 주문 문의', en: 'Stock & order inquiries' },
   'products.cta.body': {
-    ko: '온라인 스토어 오픈 전까지는 이메일과 인스타그램 DM으로 주문을 받고 있습니다.',
-    en: 'Until our online store opens, we take orders by email and Instagram DM.',
+    ko: '현재 온라인 스토어 오픈 준비 중입니다.',
+    en: 'Our online store is currently being prepared.',
   },
   'products.cta.btn': { ko: '문의하기', en: 'Get in touch' },
 
@@ -158,8 +161,8 @@ export const ui = {
   'contact.studio.title': { ko: '스튜디오 안내', en: 'Studio details' },
 
   /* ── 푸터 ── */
-  'footer.tagline': { ko: 'CERAMIC STUDIO GYEOL', en: 'CERAMIC STUDIO GYEOL' },
-  'footer.copyright': { ko: '© 2026 GYEOL. All rights reserved.', en: '© 2026 GYEOL. All rights reserved.' },
+  'footer.tagline': { ko: '무구하다', en: 'MUGUHADA' },
+  'footer.copyright': { ko: '© 2026 MUGUHADA. All rights reserved.', en: '© 2026 MUGUHADA. All rights reserved.' },
 } satisfies Record<string, { ko: string; en: string }>;
 
 export type UIKey = keyof typeof ui;

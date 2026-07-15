@@ -49,6 +49,23 @@ body {
 
 img { max-width: 100%; display: block; }
 
+/* ── 콘텐츠 보호 ──────────────────────────────────────────────────────────
+   텍스트 선택/복사와 이미지 드래그 저장을 막습니다.
+   연락처 정보(.selectable 로 지정한 이메일·전화·주소)는 예외로 선택 가능합니다. */
+body {
+  -webkit-user-select: none;
+  user-select: none;
+}
+.selectable {
+  -webkit-user-select: text;
+  user-select: text;
+}
+img {
+  -webkit-user-drag: none;
+  user-drag: none;
+  pointer-events: none; /* 이미지 우클릭·드래그 저장 방지 (클릭 필요한 요소는 부모에 pointer-events:auto 유지) */
+}
+
 a { color: inherit; text-decoration: none; }
 
 h1, h2, h3 {
@@ -140,6 +157,30 @@ p { margin: 0 0 1em; }
   border-color: currentColor;
 }
 .btn--ghost:hover { background: var(--porcelain); color: var(--glaze); }
+
+.btn.is-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* 연락처 밴드 안 인스타/이메일 인라인 표기 */
+.band-contact {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+.contact-icon-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 2px;
+}
+.contact-icon-link:hover { color: var(--celadon); }
+.contact-icon-link .icon { width: 18px; height: 18px; flex-shrink: 0; }
 
 /* 이미지 프레임 */
 .frame {
@@ -624,6 +665,8 @@ body.menu-open .lang-switch { color: var(--porcelain); }
 .logo-wordmark svg { fill: currentColor; }
 .logo-wordmark { display: block; }
 .logo-wordmark svg { height: clamp(19px, 3.2vw, 31px); width: auto; display: block; }
+/* 한글 워드마크만 영문 대비 10% 축소 */
+.logo-wordmark--ko svg { height: clamp(17.1px, 2.88vw, 27.9px); }
 
 /* 스크린리더 전용 텍스트 */
 .visually-hidden {
@@ -654,6 +697,23 @@ body.menu-open .lang-switch { color: var(--porcelain); }
   }
 }
 .spot-media .frame { aspect-ratio: 4 / 5; }
+
+/* 대표 제품: 사진 ↔ 3D 슬라이드 캐러셀 */
+.spot-carousel { position: relative; }
+.spot-photo,
+.spot-3d-slide {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.spot-photo {
+  object-fit: cover;
+  cursor: pointer;
+  touch-action: pan-y;
+}
+.spot-carousel[data-active="0"] .spot-3d-slide { display: none; }
+.spot-carousel[data-active="1"] .spot-photo { display: none; }
 
 /* 컬러 스와치 */
 .swatches { display: flex; gap: 14px; margin-top: 18px; }
@@ -765,3 +825,34 @@ body.menu-open .lang-switch { color: var(--porcelain); }
   pointer-events: none;
 }
 .viewer3d.is-ready .viewer3d-hint { opacity: 1; }
+
+/* ── 제품 이미지 갤러리 (3D 뷰어 대안) ── */
+.gallery { position: relative; cursor: pointer; touch-action: pan-y; }
+.gallery-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.gallery-dots {
+  position: absolute;
+  left: 50%;
+  bottom: 14px;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 11px;
+  background: color-mix(in srgb, #000 30%, transparent);
+  border-radius: 999px;
+  backdrop-filter: blur(3px);
+}
+.gallery-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  padding: 0;
+  border: none;
+  background: rgba(255, 255, 255, 0.45);
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+.gallery-dot[aria-current="true"] { background: #fff; transform: scale(1.2); }
+
+/* 3D 슬라이드의 "드래그해서 돌려보세요" 안내가 점 인디케이터보다 위로 오도록 */
+.spot-carousel .viewer3d-hint { bottom: 48px; }

@@ -14,9 +14,9 @@ const l = (path: string) => localizePath(path, lang);
 const current = stripLang(Astro.url.pathname);
 const items = [
   { path: '/', label: t('nav.home') },
-  { path: '/about', label: t('nav.about') },
+  // 임시 비활성화 — 나중에 다시 켤 것 { path: '/about', label: t('nav.about') },
   { path: '/products', label: t('nav.products') },
-  { path: '/contact', label: t('nav.contact') },
+  // 임시 비활성화 — 나중에 다시 켤 것 { path: '/contact', label: t('nav.contact') },
 ];
 ---
 
@@ -51,7 +51,7 @@ const items = [
         </ul>
       </nav>
 
-      <LangSwitch lang={lang} />
+      {/* 임시 비활성화 — 나중에 다시 켤 것 <LangSwitch lang={lang} /> */}
 
       <button
         class="nav-toggle"
